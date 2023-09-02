@@ -20,7 +20,7 @@
             </svg>
             <span class="logo__name">Unsplash API</span>
           </a>
-          <form autocomplete="off" class="form">
+          <form id="form" autocomplete="off" class="form">
             <div class="form__field">
               <input id="query" type="text" name="query" placeholder=" " class="form__input">
               <label class="form__label">Search pictures</label>
@@ -35,11 +35,10 @@
       </div>
     </header>
     <main>
-      <section>
-        <div>
-          <ul>
-            <li></li>
-          </ul>
+      <section class="gallery">
+        <div class="container">
+          <ul id="gallery" class="gallery__list"></ul>
+          <div id="guard" class="guard"></div>
         </div>
       </section>
     </main>
@@ -64,5 +63,6 @@
         <p class="footer__rights">&#169; 2023 Anenko. All rights reserved</p>
       </div>
     </footer>
+    <script src="./js/index.js" type="module"></script>
   </body>
 </html>
