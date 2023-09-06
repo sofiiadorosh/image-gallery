@@ -8,22 +8,17 @@ class ImagesApiService {
   }
 
   async getImages() {
-    const URL = `${BASE_URL}?query=${this.query}&page=${this.page}&per_page=10&orientation=landscape&client_id=${ACCESS_KEY}`;
+    const URL = `${BASE_URL}?query=${this.query}&page=${this.page}&per_page=40&orientation=landscape&client_id=${ACCESS_KEY}`;
     try {
       const response = await fetch(URL);
       if (!response.ok) {
         throw new Error(response.status);
       }
       const { total, results } = await response.json();
-      this.incrementPage();
       return { total, results };
     } catch (error) {
       throw new Error(error.message);
     }
-  }
-
-  incrementPage() {
-    this.page += 1;
   }
 
   resetPage() {
@@ -49,26 +44,10 @@ const overlay = document.querySelector(".backdrop");
 const modal = document.querySelector(".modal");
 const button = document.querySelector(".modal__button");
 
-const options = {
-  root: null,
-  rootMargin: "300px",
-  threshold: 1.0,
-};
-
-let imagesLength = 10;
-let isFetching = false;
-
 const imagesApiService = new ImagesApiService();
 
-const observer = new IntersectionObserver(onInfiniteScroll, options);
-
-function onInfiniteScroll(entries, observer) {
-  entries.forEach((entry) => {
-    if (entry.isIntersecting && !isFetching) {
-      getImages();
-    }
-  });
-}
+imagesApiService.query = "cat";
+getImages();
 
 refs.form.addEventListener("submit", onSearchHandler);
 refs.gallery.addEventListener("click", onShowPicture);
@@ -87,7 +66,6 @@ function onSearchHandler(e) {
   imagesApiService.resetPage();
   clearGallery();
   getImages();
-  observer.observe(refs.guard);
 
   refs.form.reset();
 }
@@ -130,22 +108,12 @@ function onEscClose(e) {
 }
 
 function getImages() {
-  isFetching = true;
-  imagesApiService.getImages().then(({ total, results }) => {
+  imagesApiService.getImages().then(({ results }) => {
     if (!results.length) {
       refs.gallery.innerHTML =
         "<li>Sorry, there are no images matching your search query. Please try again.</li>";
-    } else if (imagesLength > total) {
-      observer.unobserve(refs.guard);
-      refs.gallery.insertAdjacentHTML(
-        "beforeend",
-        "We're sorry, but you've reached the end of search results."
-      );
     } else {
       renderImagesCards(results);
-
-      imagesLength += results.length;
-      isFetching = false;
     }
   });
 }
@@ -166,7 +134,7 @@ function renderImagesCards(images) {
     )
     .join("");
 
-  refs.gallery.insertAdjacentHTML("beforeend", markup);
+  refs.gallery.innerHTML = markup;
 }
 
 function clearGallery() {
