@@ -45,6 +45,10 @@ const refs = {
   guard: document.querySelector("#guard"),
 };
 
+const overlay = document.querySelector(".backdrop");
+const modal = document.querySelector(".modal");
+const button = document.querySelector(".modal__button");
+
 const options = {
   root: null,
   rootMargin: "300px",
@@ -67,6 +71,9 @@ function onInfiniteScroll(entries, observer) {
 }
 
 refs.form.addEventListener("submit", onSearchHandler);
+refs.gallery.addEventListener("click", onShowPicture);
+button.addEventListener("click", onModalWindowClose);
+overlay.addEventListener("click", onBackdropClick);
 
 function onSearchHandler(e) {
   e.preventDefault();
@@ -85,14 +92,55 @@ function onSearchHandler(e) {
   refs.form.reset();
 }
 
+function onShowPicture(e) {
+  if (!e.target.closest("li")) {
+    return;
+  } else if (e.target.closest("li")) {
+    const picture = document.querySelector(".modal__picture");
+    if (picture) {
+      picture.remove();
+    }
+    const src = e.target.closest("li").dataset.picture;
+    modal.insertAdjacentHTML(
+      "beforeend",
+      `<img src="${src}" alt="" class="modal__picture">`
+    );
+    document.body.style.overflow = "hidden";
+    overlay.classList.remove("is-hidden");
+    document.addEventListener("keydown", onEscClose);
+  }
+}
+
+function onModalWindowClose() {
+  overlay.classList.add("is-hidden");
+  document.body.style.overflow = "visible";
+}
+
+function onBackdropClick(e) {
+  if (e.currentTarget === e.target) {
+    onModalWindowClose();
+  }
+}
+
+function onEscClose(e) {
+  if (e.code === "Escape") {
+    document.removeEventListener("keydown", onEscClose);
+    onModalWindowClose();
+  }
+}
+
 function getImages() {
   isFetching = true;
   imagesApiService.getImages().then(({ total, results }) => {
-    if (imagesLength > total) {
+    if (!results.length) {
+      refs.gallery.innerHTML =
+        "<li>Sorry, there are no images matching your search query. Please try again.</li>";
+    } else if (imagesLength > total) {
       observer.unobserve(refs.guard);
-      return "We're sorry, but you've reached the end of search results.";
-    } else if (!results.length) {
-      return "Sorry, there are no images matching your search query. Please try again.";
+      refs.gallery.insertAdjacentHTML(
+        "beforeend",
+        "We're sorry, but you've reached the end of search results."
+      );
     } else {
       renderImagesCards(results);
 
@@ -106,8 +154,8 @@ function renderImagesCards(images) {
   const markup = images
     .map(
       ({ alt_description, urls, user }) =>
-        `<li class="gallery__item">
-          <img src="${urls.regular}" alt="${alt_description}" class="gallery__pic">
+        `<li class="gallery__item" data-picture="${urls.full}">
+          <img src="${urls.regular}" alt="${alt_description}" loading="lazy" class="gallery__pic">
           <div class="gallery__overlay">
             <div class="gallery__artist">
               <img src="${user.profile_image.medium}" alt="${user.name}" class="artist__pic">

@@ -37,7 +37,26 @@
     <main>
       <section class="gallery">
         <div class="container">
-          <ul id="gallery" class="gallery__list"></ul>
+          <ul id="gallery" class="gallery__list">
+            <li class="gallery__item" data-picture="./assets/pexels-caio-62645.jpg">
+              <img src="./assets/pexels-caio-62645.jpg" alt="Caio" class="gallery__pic">
+            </li>
+            <li class="gallery__item" data-picture="./assets/pexels-josé-luis-photographer-3680770.jpg">
+              <img src="./assets/pexels-josé-luis-photographer-3680770.jpg" alt="Jose Luis" class="gallery__pic">
+            </li>
+            <li class="gallery__item" data-picture="./assets/pexels-julia-volk-5273638.jpg">
+              <img src="./assets/pexels-julia-volk-5273638.jpg" alt="Julia Volk" class="gallery__pic">
+            </li>
+            <li class="gallery__item" data-picture="./assets/pexels-luis-núñez-105987.jpg">
+              <img src="./assets/pexels-luis-núñez-105987.jpg" alt="Luis Nunez" class="gallery__pic">
+            </li>
+            <li class="gallery__item" data-picture="./assets/pexels-mike-bird-106849.jpg">
+              <img src="./assets/pexels-mike-bird-106849.jpg" alt="Mike Bird" class="gallery__pic">
+            </li>
+            <li class="gallery__item" data-picture="./assets/pexels-skitterphoto-3478.jpg">
+              <img src="./assets/pexels-skitterphoto-3478.jpg" alt="Skitter" class="gallery__pic">
+            </li>
+          </ul>
           <div id="guard" class="guard"></div>
         </div>
       </section>
@@ -63,6 +82,15 @@
         <p class="footer__rights">&#169; 2023 Anenko. All rights reserved</p>
       </div>
     </footer>
+    <div class="backdrop is-hidden">
+      <div class="modal">
+        <button type="button" class="modal__button">
+          <svg width="24" height="24">
+            <use href="./assets/sprite.svg#icon-close"></use>
+          </svg>
+        </button>
+      </div>
+    </div>
     <script src="./js/index.js" type="module"></script>
   </body>
 </html>
