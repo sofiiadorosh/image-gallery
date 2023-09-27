@@ -36,8 +36,10 @@ class ImagesApiService {
 
 const refs = {
   form: document.querySelector("#form"),
+  queryInput: document.querySelector('#query'),
   gallery: document.querySelector("#gallery"),
   guard: document.querySelector("#guard"),
+  clearButton: document.querySelector('.form__close'),
 };
 
 const overlay = document.querySelector(".backdrop");
@@ -50,9 +52,26 @@ imagesApiService.query = "cat";
 getImages();
 
 refs.form.addEventListener("submit", onSearchHandler);
+refs.form.addEventListener("reset", onHideCross);
 refs.gallery.addEventListener("click", onShowPicture);
+refs.queryInput.addEventListener("input", onShowCross);
 button.addEventListener("click", onModalWindowClose);
 overlay.addEventListener("click", onBackdropClick);
+
+
+function onShowCross(e) {
+  const query = e.target.value;
+
+  if (!query.length) {
+    refs.clearButton.style.opacity = '0';
+  } else {
+    refs.clearButton.style.opacity = '1';
+  }
+}
+
+function onHideCross(e) {
+  refs.clearButton.style.opacity = '0';
+}
 
 function onSearchHandler(e) {
   e.preventDefault();
@@ -63,11 +82,9 @@ function onSearchHandler(e) {
     return "Search box cannot be empty. Please enter the word.";
   }
 
-  imagesApiService.resetPage();
-  clearGallery();
-  getImages();
-
-  refs.form.reset();
+    imagesApiService.resetPage();
+    clearGallery();
+    getImages();
 }
 
 function onShowPicture(e) {

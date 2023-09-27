@@ -22,14 +22,21 @@
           </a>
           <form id="form" autocomplete="off" class="form">
             <div class="form__field">
-              <input id="query" type="text" name="query" placeholder=" " class="form__input">
-              <label class="form__label">Search pictures</label>
+              <input id="query" type="text" name="query" placeholder=" " class="form__input" autofocus>
+              <label for="query" class="form__label">Search pictures</label>
             </div>
-            <button class="form__button">
-              <svg width="24" height="24">
-                <use href="./assets/sprite.svg#icon-search"></use>
-              </svg>
-            </button>
+            <div class="form__button">
+              <button type="reset" class="form__close">
+                <svg width="20" height="20">
+                  <use href="./assets/sprite.svg#icon-close"></use>
+                </svg>
+              </button>
+              <button class="form__search">
+                <svg width="24" height="24">
+                  <use href="./assets/sprite.svg#icon-search"></use>
+                </svg>
+              </button>
+            </div>
           </form>
         </div>
       </div>
